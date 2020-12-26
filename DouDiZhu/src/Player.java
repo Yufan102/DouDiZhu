@@ -8,7 +8,7 @@ public class Player {
     private ArrayList<Card>AIOutput = new ArrayList<Card>();
     private ArrayList<Card>userOutput = new ArrayList<Card>();
     private ArrayList<Card>ai1 = new ArrayList<Card>();
-    private ArrayList<Card>ai2 = new ArrayList<Card>();
+    SillyAI sb = new SillyAI(this);
     private boolean coop;
     private Points points;
 
@@ -33,6 +33,10 @@ public class Player {
 
     public void rank(){
         Collections.sort(cardsOnHand);
+    }
+
+    public void setCardsOnHand(ArrayList<Card> cardsOnHand) {
+        this.cardsOnHand = cardsOnHand;
     }
 
     public void isLord(){
@@ -77,15 +81,19 @@ public class Player {
         this.rank();
     }
 
+    //stupid AI
+    public void AIPlayer(ArrayList<Card>out){
+        ai1 = sb.SillyAIPlay(out);
+        cardsOnHand = sb.getAiCard();
+    }
+
+
 
 
     public ArrayList<Card> getAi1() {
         return ai1;
     }
 
-    public ArrayList<Card> getAi2() {
-        return ai2;
-    }
 
     public ArrayList<Card> getUserOutput() {
         return userOutput;

@@ -9,7 +9,7 @@ public class Game {
     private Player ai2 = new Player();
     private ArrayList<Card>threeCard = new ArrayList<Card>();
     private ArrayList<Card> lordCard = new ArrayList<Card>();
-    private ArrayList<Integer> StraightNum = new ArrayList<Integer>();
+    private static ArrayList<Integer> StraightNum = new ArrayList<Integer>();
     private int winNum = 0;
 
     private int whoWin(){
@@ -25,22 +25,22 @@ public class Game {
     }
 
 
-    public boolean ifCouples(ArrayList<Card>out){
+    public static boolean ifCouples(ArrayList<Card>out){
         if (out.size() == 2){
             return out.get(0).getNumber().equals(out.get(1));
         }return false;
     }
 
-    public boolean ifSingle(ArrayList<Card>out){
+    public static boolean ifSingle(ArrayList<Card>out){
         return out.size() == 1;
     }
 
-    public boolean ifThree(ArrayList<Card>out){
+    public static boolean ifThree(ArrayList<Card>out){
         return out.size() == 3 && out.get(0).getNumber().equals(out.get(1).getNumber())
                 && out.get(1).getNumber().equals(out.get(2).getNumber());
     }
 
-    public boolean ifStraight(ArrayList<Card>out){
+    public static boolean ifStraight(ArrayList<Card>out){
         if (out.size() > 4){
             for (int i = 0; i < out.size() -1; i ++){
                 if (out.get(i).getPriority() != out.get(i + 1).getPriority()-1){
@@ -52,7 +52,7 @@ public class Game {
         }return false;
     }
 
-    public boolean ifBoom(ArrayList<Card>out){
+    public static boolean ifBoom(ArrayList<Card>out){
         if (out.size() == 4){
             return out.get(0).getPriority() == out.get(1).getPriority() &&
                     out.get(0).getPriority() == out.get(2).getPriority() &&
@@ -60,7 +60,7 @@ public class Game {
         }return false;
     }
 
-    public boolean ifKingBoom(ArrayList<Card>out){
+    public static boolean ifKingBoom(ArrayList<Card>out){
         return out.get(0).getPriority() == 16 && out.get(1).getPriority() == 17;
     }
 
@@ -239,31 +239,138 @@ public class Game {
         }
     }
 
-    public void playMain(){
-        while (whoWin() != 0 ){
-            if (user.getCardsOnHand().size() == 20){
+    public void playMain() {
+//            if (user.getCardsOnHand().size() == 20){
+//                System.out.println("你是地主，由你打第一轮牌");
+//                sleep(500);
+//
+//            }else if (ai1.getCardsOnHand().size() == 20){
+//                System.out.println("用户一地主，由你打第一轮牌");
+//                sleep(500);
+//
+//            }else if (ai2.getCardsOnHand().size() == 20){
+//                System.out.println("用户二地主，由你打第一轮牌");
+//                sleep(500);
+//
+//            }
 
-            }else if (ai1.getCardsOnHand().size() == 20){
+        System.out.println("人工智障一的牌为");
+        printCard(ai1.getCardsOnHand());
+        System.out.println("人工智障二的牌为");
+        printCard(ai2.getCardsOnHand());
 
-            }else if (ai2.getCardsOnHand().size() == 20){
+        System.out.println("\n" +
+                "\n");
+
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<String> com = new ArrayList<String>();
+        System.out.println("\n" +
+                "输入你要打的牌");
+
+
+        String input = sc.next();
+        com.add(input);
+
+        while (true) {
+            input = sc.next();
+            if (input.equals("-1")) {
+                break;
+            }
+            com.add(input);
+        }
+
+
+        ArrayList<Card> ai1Out = new ArrayList<Card>();
+        ArrayList<Card> ai2Out = new ArrayList<Card>();
+        ArrayList<Card> out = new ArrayList<Card>();
+        user.userPlay(com);
+        out = user.getUserOutput();
+
+
+        while (true) {
+            if (out.size() != 0) {
+                sleep(700);
+                System.out.println("你打的牌为");
+                sleep(700);
+                printCard(out);
+
+                ai1Out = ai1.sb.SillyAIPlay(out);
+
+
+                if (ai1Out!= null) {
+                    if (ai1Out.size() != 0) {
+                        System.out.println("人工智障一打的牌为");
+                        printCard(ai1Out);
+                        ai2Out = ai2.sb.SillyAIPlay(ai1Out);
+
+                    }
+                    else {
+                        System.out.println("人工智障一啥也不知道");
+                    }
+                }else {
+                    System.out.println("人工智障一啥也不知道");
+                }
+
+
+                sleep(700);
+                if (ai2Out != null) {
+                    if (ai2Out.size() != 0) {
+                        System.out.println("人工智障二打的牌为");
+                        sleep(700);
+                        printCard(ai2Out);
+                    } else {
+                        System.out.println("人工智障二啥也不会");
+                    }
+                }else {
+                    System.out.println("人工智障二啥也不会");
+                }
+
+                sleep(700);
+
+
+                whoWin();
+                if (winNum != 0) {
+                    break;
+                }
+
+                System.out.println("\n"+
+                        "你的牌为");
+                printCard(user.getCardsOnHand());
+                sleep(500);
+
+                sc = new Scanner(System.in);
+                com = new ArrayList<String>();
+                System.out.println("\n" +
+                        "输入你要打的牌");
+
+
+                input = sc.next();
+                com.add(input);
+
+                while (true) {
+                    input = sc.next();
+                    if (input.equals("-1")) {
+                        break;
+                    }
+                    com.add(input);
+                }
 
             }
+
         }
     }
 
 
+        public Player getUser () {
+            return user;
+        }
 
+        public Player getAi1 () {
+            return ai1;
+        }
 
-
-    public Player getUser() {
-        return user;
+        public Player getAi2 () {
+            return ai2;
+        }
     }
-
-    public Player getAi1() {
-        return ai1;
-    }
-
-    public Player getAi2() {
-        return ai2;
-    }
-}
