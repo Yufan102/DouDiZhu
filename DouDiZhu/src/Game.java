@@ -27,7 +27,7 @@ public class Game {
 
     public static boolean ifCouples(ArrayList<Card>out){
         if (out.size() == 2){
-            return out.get(0).getNumber().equals(out.get(1));
+            return out.get(0).getPriority() == out.get(1).getPriority();
         }return false;
     }
 
@@ -284,9 +284,7 @@ public class Game {
         ArrayList<Card> ai1Out = new ArrayList<Card>();
         ArrayList<Card> ai2Out = new ArrayList<Card>();
         ArrayList<Card> out = new ArrayList<Card>();
-        user.userPlay(com);
-        out = user.getUserOutput();
-
+        out = user.userPlay(com);
 
         while (true) {
             if (out.size() != 0) {
@@ -295,14 +293,13 @@ public class Game {
                 sleep(700);
                 printCard(out);
 
-                ai1Out = ai1.sb.SillyAIPlay(out);
+                ai1Out = ai1.sb.AIPlay(out);
 
 
                 if (ai1Out!= null) {
                     if (ai1Out.size() != 0) {
                         System.out.println("人工智障一打的牌为");
                         printCard(ai1Out);
-                        ai2Out = ai2.sb.SillyAIPlay(ai1Out);
 
                     }
                     else {
@@ -312,6 +309,14 @@ public class Game {
                     System.out.println("人工智障一啥也不知道");
                 }
 
+                //if ai1out is null
+                if (ai1Out != null) {
+                    if (ai1Out.size() != 0) {
+                        ai2Out = ai2.sb.AIPlay(ai1Out);
+                    }
+                }else {
+                    ai2Out = ai2.sb.AIPlay(out);
+                }
 
                 sleep(700);
                 if (ai2Out != null) {
@@ -322,7 +327,8 @@ public class Game {
                     } else {
                         System.out.println("人工智障二啥也不会");
                     }
-                }else {
+                }
+                else {
                     System.out.println("人工智障二啥也不会");
                 }
 
@@ -357,7 +363,7 @@ public class Game {
                 }
 
             }
-
+            out = user.userPlay(com);
         }
     }
 

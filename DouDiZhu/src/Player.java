@@ -6,9 +6,9 @@ public class Player {
     private String type;
     private ArrayList<Card>cardsOnHand = new ArrayList<Card>();
     private ArrayList<Card>AIOutput = new ArrayList<Card>();
-    private ArrayList<Card>userOutput = new ArrayList<Card>();
+
     private ArrayList<Card>ai1 = new ArrayList<Card>();
-    SillyAI sb = new SillyAI(this);
+    AI sb = new SillyAI(this);
     private boolean coop;
     private Points points;
 
@@ -57,18 +57,17 @@ public class Player {
         return points;
     }
 
-    public void userPlay(ArrayList<String>com){
+    public ArrayList<Card> userPlay(ArrayList<String>com){
+        ArrayList<Card>userOutput = new ArrayList<Card>();
         int count = 0;
         ArrayList<Card>backUp = cardsOnHand;
 
-        for (String items : com){
-            for(int i = 0; i < cardsOnHand.size();i ++){
-                if (items.equals(cardsOnHand.get(i).getNumber())){
+        for (String items : com) {
+            for (int i = 0; i < cardsOnHand.size(); i++) {
+                if (items.equals(cardsOnHand.get(i).getNumber())) {
                     count++;
                     userOutput.add(cardsOnHand.get(i));
                     cardsOnHand.remove(i);
-                }
-                if (count == com.size()){
                     break;
                 }
             }
@@ -79,11 +78,12 @@ public class Player {
             System.out.println("你没有这样的牌");
         }
         this.rank();
+        return userOutput;
     }
 
     //stupid AI
     public void AIPlayer(ArrayList<Card>out){
-        ai1 = sb.SillyAIPlay(out);
+        ai1 = sb.AIPlay(out);
         cardsOnHand = sb.getAiCard();
     }
 
@@ -95,7 +95,4 @@ public class Player {
     }
 
 
-    public ArrayList<Card> getUserOutput() {
-        return userOutput;
-    }
 }
