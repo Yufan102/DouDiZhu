@@ -240,118 +240,250 @@ public class Game {
     }
 
     public void playMain() {
-//            if (user.getCardsOnHand().size() == 20){
-//                System.out.println("你是地主，由你打第一轮牌");
-//                sleep(500);
-//
-//            }else if (ai1.getCardsOnHand().size() == 20){
-//                System.out.println("用户一地主，由你打第一轮牌");
-//                sleep(500);
-//
-//            }else if (ai2.getCardsOnHand().size() == 20){
-//                System.out.println("用户二地主，由你打第一轮牌");
-//                sleep(500);
-//
-//            }
-
-        System.out.println("人工智障一的牌为");
-        printCard(ai1.getCardsOnHand());
-        System.out.println("人工智障二的牌为");
-        printCard(ai2.getCardsOnHand());
-
-        System.out.println("\n" +
-                "\n");
-
-
         Scanner sc = new Scanner(System.in);
         ArrayList<String> com = new ArrayList<String>();
-        System.out.println("\n" +
-                "输入你要打的牌");
-
-
-        String input = sc.next();
-        com.add(input);
-
-        while (true) {
-            input = sc.next();
-            if (input.equals("-1")) {
-                break;
-            }
-            com.add(input);
-        }
-
-
         ArrayList<Card> ai1Out = new ArrayList<Card>();
         ArrayList<Card> ai2Out = new ArrayList<Card>();
         ArrayList<Card> out = new ArrayList<Card>();
-        out = user.userPlay(com);
 
-        while (true) {
-            if (out.size() != 0) {
-                sleep(700);
-                System.out.println("你打的牌为");
-                sleep(700);
-                printCard(out);
+        //
+        if (user.getCardsOnHand().size() == 20){
+            System.out.println("你是地主，由你打第一轮牌");
+            sleep(500);
+            System.out.println("你要打的牌为：");
+            String input = sc.next();
+            com.add(input);
 
-                ai1Out = ai1.sb.AIPlay(out);
-
-
-                if (ai1Out!= null) {
-                    if (ai1Out.size() != 0) {
-                        System.out.println("人工智障一打的牌为");
-                        printCard(ai1Out);
-
-                    }
-                    else {
-                        System.out.println("人工智障一啥也不知道");
-                    }
-                }else {
-                    System.out.println("人工智障一啥也不知道");
-                }
-
-                //if ai1out is null
-                if (ai1Out != null) {
-                    if (ai1Out.size() != 0) {
-                        ai2Out = ai2.sb.AIPlay(ai1Out);
-                    }
-                }else {
-                    ai2Out = ai2.sb.AIPlay(out);
-                }
-
-                sleep(700);
-                if (ai2Out != null) {
-                    if (ai2Out.size() != 0) {
-                        System.out.println("人工智障二打的牌为");
-                        sleep(700);
-                        printCard(ai2Out);
-                    } else {
-                        System.out.println("人工智障二啥也不会");
-                    }
-                }
-                else {
-                    System.out.println("人工智障二啥也不会");
-                }
-
-                sleep(700);
-
-
-                whoWin();
-                if (winNum != 0) {
+            while (true) {
+                input = sc.next();
+                if (input.equals("-1")) {
                     break;
                 }
+                com.add(input);
+            }
 
-                System.out.println("\n"+
-                        "你的牌为");
-                printCard(user.getCardsOnHand());
+            out = user.userPlay(com);
+
+            while (true) {
+
+                if (out.size() != 0) {
+                    System.out.println("\n");
+                    sleep(700);
+                    System.out.println("你打的牌为");
+                    sleep(700);
+                    printCard(out);
+
+                    ai1Out = ai1.sb.AIPlay(out);
+
+
+                    if (ai1Out!= null) {
+                        if (ai1Out.size() != 0) {
+                            System.out.println("人工智障一打的牌为");
+                            printCard(ai1Out);
+
+                        }
+                        else {
+                            System.out.println("人工智障一啥也不知道");
+                        }
+                    }else {
+                        System.out.println("人工智障一啥也不知道");
+                    }
+
+                    //if ai1out is null
+                    if (ai1Out != null) {
+                        if (ai1Out.size() != 0) {
+                            ai2Out = ai2.sb.AIPlay(ai1Out);
+                        }
+                    }else {
+                        ai2Out = ai2.sb.AIPlay(out);
+                    }
+
+                    sleep(700);
+                    if (ai2Out != null) {
+                        if (ai2Out.size() != 0) {
+                            System.out.println("人工智障二打的牌为");
+                            sleep(700);
+                            printCard(ai2Out);
+                        } else {
+                            System.out.println("人工智障二啥也不会");
+                        }
+                    }
+                    else {
+                        System.out.println("人工智障二啥也不会");
+                    }
+
+                    sleep(700);
+
+
+                    whoWin();
+                    if (winNum != 0) {
+                        break;
+                    }
+
+                    System.out.println("\n"+
+                            "打完之后的牌为");
+                    printCard(user.getCardsOnHand());
+                    sleep(500);
+
+                    sc = new Scanner(System.in);
+                    com = new ArrayList<String>();
+                    System.out.println("\n" +
+                            "输入你要打的牌");
+
+                    input = sc.next();
+                    com.add(input);
+
+                    while (true) {
+                        input = sc.next();
+                        if (input.equals("-1")) {
+                            break;
+                        }
+                        com.add(input);
+                    }
+                    out = user.userPlay(com);
+                }
+            }
+        }
+        else if (ai1.getCardsOnHand().size() == 20){
+                System.out.println("用户一地主，由他打第一轮牌");
                 sleep(500);
+                while (true){
+                    //run for the first time
+                    while (true) {
+                        ai1Out = ai1.sb.FirstRound();
+                        System.out.println("用户一打的牌是：");
+                        sleep(500);
 
-                sc = new Scanner(System.in);
-                com = new ArrayList<String>();
-                System.out.println("\n" +
-                        "输入你要打的牌");
+                        printCard(ai1Out);
+                        ai2Out = ai2.sb.AIPlay(ai1Out);
+
+                        if (ai2Out != null) {
+                            if (ai2Out.size() != 0) {
+                                System.out.println("用户二打的牌是：");
+                                sleep(500);
+                                printCard(ai2Out);
+                                sleep(500);
+                            }else {
+                                System.out.println("用户二啥也不晓得");
+                            }
+                            System.out.println("用户二啥也不晓得");
+                            sleep(500);
+                        }
+                        break;
+                    }
+
+                    System.out.println("现在归你打牌了");
+                    sleep(500);
+                    System.out.println("你的牌为");
+                    sleep(500);
+                    printCard(user.getCardsOnHand());
+                    sleep(500);
+
+                    String input = sc.next();
+                    com.add(input);
+
+                    while (true) {
+                        input = sc.next();
+                        if (input.equals("-1")) {
+                            break;
+                        }
+                        com.add(input);
+                    }
+
+                    out = user.userPlay(com);
+
+                    if (out.size() != 0) {
+                        System.out.println("\n");
+                        sleep(700);
+                        System.out.println("你打的牌为");
+                        sleep(700);
+                        printCard(out);
+
+                        ai1Out = ai1.sb.AIPlay(out);
 
 
-                input = sc.next();
+                        if (ai1Out!= null) {
+                            if (ai1Out.size() != 0) {
+                                System.out.println("人工智障一打的牌为");
+                                printCard(ai1Out);
+
+                            }
+                            else {
+                                System.out.println("人工智障一啥也不知道");
+                            }
+                        }else {
+                            System.out.println("人工智障一啥也不知道");
+                        }
+
+                        //if ai1out is null
+                        if (ai1Out != null) {
+                            if (ai1Out.size() != 0) {
+                                ai2Out = ai2.sb.AIPlay(ai1Out);
+                            }
+                        }else {
+                            ai2Out = ai2.sb.AIPlay(out);
+                        }
+
+                        sleep(700);
+                        if (ai2Out != null) {
+                            if (ai2Out.size() != 0) {
+                                System.out.println("人工智障二打的牌为");
+                                sleep(700);
+                                printCard(ai2Out);
+                            } else {
+                                System.out.println("人工智障二啥也不会");
+                            }
+                        } else {
+                            System.out.println("人工智障二啥也不会");
+                        }
+
+                        sleep(700);
+
+
+                        whoWin();
+                        if (winNum != 0) {
+                            break;
+                        }
+
+                        System.out.println("\n"+
+                                "打完之后的牌为");
+                        printCard(user.getCardsOnHand());
+                        sleep(500);
+
+                        sc = new Scanner(System.in);
+                        com = new ArrayList<String>();
+                        System.out.println("\n" +
+                                "输入你要打的牌");
+
+                        input = sc.next();
+                        com.add(input);
+
+                        while (true) {
+                            input = sc.next();
+                            if (input.equals("-1")) {
+                                break;
+                            }
+                            com.add(input);
+                        }
+                        out = user.userPlay(com);
+                    }
+                }
+        }
+
+        //ai2 is the landlord
+        else if (ai2.getCardsOnHand().size() == 20) {
+            System.out.println("用户二地主，由他打第一轮牌");
+            sleep(500);
+            while (true){
+
+                ai2Out = ai2.sb.FirstRound();
+                System.out.println("用户二打的牌是：");
+                sleep(500);
+                printCard(ai2Out);
+                //further install here, the rules, user's must be larger
+
+                System.out.println("现在归你打牌");
+                String input = sc.next();
                 com.add(input);
 
                 while (true) {
@@ -362,9 +494,90 @@ public class Game {
                     com.add(input);
                 }
 
+                out = user.userPlay(com);
+
+                if (out.size() != 0){
+                    System.out.println("\n");
+                    sleep(700);
+                    System.out.println("你打的牌为");
+                    sleep(700);
+                    printCard(out);
+
+                    ai1Out = ai1.sb.AIPlay(out);
+
+
+                    if (ai1Out!= null) {
+                        if (ai1Out.size() != 0) {
+                            System.out.println("人工智障一打的牌为");
+                            printCard(ai1Out);
+
+                        }
+                        else {
+                            System.out.println("人工智障一啥也不知道");
+                        }
+                    }else {
+                        System.out.println("人工智障一啥也不知道");
+                    }
+
+                    //if ai1out is null
+                    if (ai1Out != null) {
+                        if (ai1Out.size() != 0) {
+                            ai2Out = ai2.sb.AIPlay(ai1Out);
+                        }
+                    }else {
+                        ai2Out = ai2.sb.AIPlay(out);
+                    }
+
+                    sleep(700);
+                    if (ai2Out != null) {
+                        if (ai2Out.size() != 0) {
+                            System.out.println("人工智障二打的牌为");
+                            sleep(700);
+                            printCard(ai2Out);
+                        } else {
+                            System.out.println("人工智障二啥也不会");
+                        }
+                    } else {
+                        System.out.println("人工智障二啥也不会");
+                    }
+
+                    sleep(700);
+
+
+                    whoWin();
+                    if (winNum != 0) {
+                        break;
+                    }
+
+                    System.out.println("\n"+
+                            "打完之后的牌为");
+                    printCard(user.getCardsOnHand());
+                    sleep(500);
+
+                    sc = new Scanner(System.in);
+                    com = new ArrayList<String>();
+                    System.out.println("\n" +
+                            "输入你要打的牌");
+
+                    input = sc.next();
+                    com.add(input);
+
+                    while (true) {
+                        input = sc.next();
+                        if (input.equals("-1")) {
+                            break;
+                        }
+                        com.add(input);
+                    }
+                    out = user.userPlay(com);
+                }
+
+
             }
-            out = user.userPlay(com);
+
+
         }
+
     }
 
 

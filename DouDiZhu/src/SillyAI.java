@@ -15,6 +15,7 @@ public class SillyAI extends AI {
         if (Game.ifStraight(out))return null;
         if (out.get(0).getPriority() == 16 || out.get(0).getPriority() == 17)return null;
         if (Game.ifBoom(out) || Game.ifKingBoom(out) || Game.ifThree(out))return null;
+
         //single
         if (out.size() == 1) {
             for (int i = 0; i < aiCard.size(); i++) {
@@ -67,5 +68,29 @@ public class SillyAI extends AI {
         }
 
         return null;
+    }
+
+    @Override
+    public ArrayList<Card> FirstRound() {
+        ArrayList<Card>out = new ArrayList<Card>();
+        int decide = Game.NoDuplicateRandom(10,1).get(0);
+
+        if (decide <= 5){
+            out.add(aiCard.get(0));
+            aiCard.remove(0);
+        }else {
+            for (int i = 0; i < aiCard.size(); i ++){
+                Card first = aiCard.get(i);
+                for (int j = 1; j < aiCard.size()-1; j ++){
+                    Card second = aiCard.get(j);
+                    if (first.getPriority() == second.getPriority()){
+                        out.add(first);out.add(second);
+                        aiCard.remove(i); aiCard.remove(j);
+                    }
+                }
+            }
+        }
+
+        return out;
     }
 }

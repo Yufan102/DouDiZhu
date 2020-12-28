@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DouDiZhu:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DouDiZhu_jar</output-path>
+    <root id="archive" name="DouDiZhu.jar">
+      <element id="module-output" name="DouDiZhu" />
+    </root>
+  </artifact>
+</component>

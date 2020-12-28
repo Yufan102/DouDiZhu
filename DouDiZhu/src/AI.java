@@ -19,4 +19,6 @@ public abstract class AI {
     }
 
     public abstract ArrayList<Card> AIPlay(ArrayList<Card>out);
+
+    public abstract ArrayList<Card> FirstRound();
 }
