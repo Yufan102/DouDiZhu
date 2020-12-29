@@ -26,7 +26,6 @@ public class SillyAI extends AI {
                     return pass;
                 }
             }
-            ;
             return null;
         }
 
@@ -86,6 +85,8 @@ public class SillyAI extends AI {
                     if (first.getPriority() == second.getPriority()){
                         out.add(first);out.add(second);
                         aiCard.remove(i); aiCard.remove(j);
+                        i = 17;
+                        break;
                     }
                 }
             }

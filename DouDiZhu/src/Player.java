@@ -6,6 +6,7 @@ public class Player {
     private String type;
     private ArrayList<Card>cardsOnHand = new ArrayList<Card>();
     private ArrayList<Card>AIOutput = new ArrayList<Card>();
+    private ArrayList<Card>backUp = new ArrayList<Card>();
 
     private ArrayList<Card>ai1 = new ArrayList<Card>();
     AI sb = new SillyAI(this);
@@ -60,7 +61,7 @@ public class Player {
     public ArrayList<Card> userPlay(ArrayList<String>com){
         ArrayList<Card>userOutput = new ArrayList<Card>();
         int count = 0;
-        ArrayList<Card>backUp = cardsOnHand;
+        backUp = cardsOnHand;
 
         for (String items : com) {
             for (int i = 0; i < cardsOnHand.size(); i++) {
@@ -80,6 +81,12 @@ public class Player {
         this.rank();
         return userOutput;
     }
+
+    public void ReturnBack(){
+        this.setCardsOnHand(backUp);
+    }
+
+
 
     //stupid AI
     public void AIPlayer(ArrayList<Card>out){

@@ -8,7 +8,5 @@ public class testMain {
         game.deal();
         game.callForLord();
         game.playMain();
-
-
     }
 }
