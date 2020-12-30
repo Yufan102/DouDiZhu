@@ -1,3 +1,4 @@
+Chinese version of user interface, English comments.  
 Author: Yufan Zhou Dalhousie University Second-year student  
 Contact: yufanz@dal.ca for bugs and suggestions, and any disscussion will be welcome!  
 This is an unfinished beta, looking for further update  
