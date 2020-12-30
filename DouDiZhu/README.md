@@ -1,5 +1,4 @@
-#-
-12.26
-目前组在的的已经知道的bug
-1 用户输出为恒值
-2 ai无法识别对子
+Version 1.20  
+1, Bugs fixed  
+2, Basic game function could play right now.  
+3, Due to author's knowledge, the game can only run in the IDEA's consle.  
