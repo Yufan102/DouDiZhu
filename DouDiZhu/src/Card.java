@@ -1,11 +1,15 @@
 import java.util.HashMap;
-
+/*
+This class is created for the card with different types and numbers
+that will be added as lists to be used
+ */
 public class Card implements Comparable {
     private String type;
     private String number;
     private int priority = 3;
     private HashMap<String,Integer> cardSet = new HashMap<String, Integer>();
 
+    // the constructor will add the number of card by hashing the char of the real card
     public Card(String type, String number){
         cardSet.put("J",11);
         cardSet.put("Q",12);
@@ -28,6 +32,7 @@ public class Card implements Comparable {
         this.priority = cardSet.get(number);
     }
 
+    //getters and setters
     public String getType() {
         return type;
     }
@@ -40,21 +45,20 @@ public class Card implements Comparable {
         return number;
     }
 
-    public Boolean isBigger(Card card){
-        return this.priority > card.getPriority();
-    }
-
+    /**
+     * This method will print the card for playing
+     * @return the String to be printed
+     */
     public String display(){
         String display = "|" + this.type + " " + this.number + "|";
-
         return display;
     }
 
-    public Boolean compareTo(Card card){
-        return card.getPriority() > this.priority;
-    }
-
-
+    /**
+     * This method is used to sort the list of cards
+     * @param o the card
+     * @return if the pass card is bigger
+     */
     @Override
     public int compareTo(Object o) {
         Card c = (Card)o;

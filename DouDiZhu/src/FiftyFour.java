@@ -1,8 +1,14 @@
 import java.util.ArrayList;
-
+/*
+This method is only used to creat the whole tables of card
+ */
 public class FiftyFour {
     private ArrayList<Card> cards = new ArrayList<Card>();
 
+    /**
+     * Creating 54 cards
+     * @param type the char of cards
+     */
     private void creatCards(String type){
         for (int i = 3; i < 16; i ++){
             if (i <= 10){
@@ -39,27 +45,20 @@ public class FiftyFour {
         cards.add(K);
     }
 
+    //getters
     public ArrayList<Card> getCards() {
         return cards;
-    }
-
-    public void displayAll(){
-        for (Card card : cards){
-            System.out.print(card.display()+ " ");
-        }
     }
 
     public int size(){
         return cards.size();
     }
 
+    //This method will remove the card with adding to another
     public Card poll(int i){
         Card now = cards.get(i);
         cards.remove(i);
         return now;
     }
 
-    public String cardToString(int i){
-        return cards.get(i).display();
-    }
 }

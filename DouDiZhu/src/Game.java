@@ -2,18 +2,26 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/*
+This is the main function for the whole game
+ */
 public class Game {
     private FiftyFour cards = new FiftyFour();
     private Player user = new Player();
     private Player ai1 = new Player();
     private Player ai2 = new Player();
-    private ArrayList<Card> threeCard = new ArrayList<Card>();
     private ArrayList<Card> lordCard = new ArrayList<Card>();
     private static ArrayList<Integer> StraightNum = new ArrayList<Integer>();
     private int winNum = 0;
     private int runTime = 0;
-    private boolean userCardStatus = false;
+    private boolean userCardStatus = false;    //if the user's card is bigger
+    private boolean pass = false;              //if the user decide to pass the round
 
+    /**
+     * Check if one of three players wins this
+     *
+     * @return the winner number
+     */
     private int whoWin() {
         if (user.isWin()) {
             winNum = 3;
@@ -29,6 +37,18 @@ public class Game {
     }
 
 
+    /**
+     * Print the points in this round
+     */
+    private void printPoints() {
+        System.out.println("这一轮分数情况为");
+        System.out.println("用户分数：" + user.getPoints().getNum() + " AI1：" + ai1.getPoints().getNum() +
+                " ai2: " + ai2.getPoints().getNum());
+    }
+
+    /*
+    The following if methods is checking the different types of passed cards
+     */
     public static boolean ifCouples(ArrayList<Card> out) {
         if (out.size() == 2) {
             return out.get(0).getPriority() == out.get(1).getPriority();
@@ -67,10 +87,16 @@ public class Game {
         return false;
     }
 
+
     public static boolean ifKingBoom(ArrayList<Card> out) {
         return out.get(0).getPriority() == 16 && out.get(1).getPriority() == 17;
     }
 
+    /**
+     * Two different methods will print the card
+     *
+     * @param cards cards to be printed
+     */
     public static void printCard(ArrayList<Card> cards) {
         for (Card c : cards) {
             System.out.print(c.display() + " ");
@@ -85,12 +111,20 @@ public class Game {
         System.out.println();
     }
 
+    //set the points for the user
     private void pointsSetters(int a, int b, int c) {
         user.setPoints(a);
         ai1.setPoints(b);
         ai2.setPoints(c);
     }
 
+    /**
+     * This method will creating random numbers
+     *
+     * @param bounds the bounds of number, will not touch the bounds
+     * @param n      numbers of random numbers
+     * @return the random numbers list
+     */
     public static ArrayList<Integer> NoDuplicateRandom(int bounds, int n) {
         Random random = new Random();
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -106,6 +140,7 @@ public class Game {
         return list;
     }
 
+    //let the system sleep
     public static void sleep(int num) {
         try {
             Thread.sleep(num);
@@ -118,17 +153,18 @@ public class Game {
     public Game() {
     }
 
+    // deal for the cards to three players
     public void deal() {
         ArrayList<Integer> lordCardNum = NoDuplicateRandom(51, 3);
 
 
-        //add dizhupai
+        //add landlord's cards
         for (int num : lordCardNum) {
             lordCard.add(cards.poll(num));
         }
 
+        //adding random cards for three users
         ArrayList<Integer> random = NoDuplicateRandom(cards.size(), 51);
-
 
         int count = 0;
         while (count < random.size()) {
@@ -139,6 +175,7 @@ public class Game {
             ai2.getCardsOnHand().add(cards.getCards().get(count));
             count++;
         }
+        //sorting the cards
         user.rank();
         ai1.rank();
         ai2.rank();
@@ -147,7 +184,7 @@ public class Game {
         printCard(user);
     }
 
-    //call for the land lord
+    //call for the landlord
     public void callForLord() {
         Scanner kb = new Scanner(System.in);
         System.out.println("叫地主？给几分？");
@@ -248,7 +285,9 @@ public class Game {
 
         }
     }
-    private static boolean ifInsideBigger(ArrayList<Card> passed, ArrayList<Card> inputs){
+
+    //the method of common method to decide types of card
+    private static boolean ifInsideBigger(ArrayList<Card> passed, ArrayList<Card> inputs) {
         int passNum = passed.get(0).getPriority();
         int inputNum = inputs.get(0).getPriority();
         if (inputNum > passNum) {
@@ -260,7 +299,17 @@ public class Game {
         }
     }
 
+    /**
+     * This method is checking whether the input cards is bigger than
+     * the previous cards
+     *
+     * @param passed the previous cards
+     * @param inputs the input cards
+     * @return true if bigger, false if not
+     */
     public static boolean IfInputBigger(ArrayList<Card> passed, ArrayList<Card> inputs) {
+
+        if (passed == null) return true;
 
         if (ifStraight(passed)) {
             if (!ifStraight(inputs)) {
@@ -272,43 +321,41 @@ public class Game {
                 System.out.println("你输入的顺子长度不对，输入失败");
                 return false;
             }
-            return ifInsideBigger(passed,inputs);
+            return ifInsideBigger(passed, inputs);
 
-        }
-
-        else if (ifCouples(passed)) {
+        } else if (ifCouples(passed)) {
             if (!ifCouples(inputs)) {
                 System.out.println("你输入的不是对子，输入失败");
                 return false;
             }
-            return ifInsideBigger(passed,inputs);
+            return ifInsideBigger(passed, inputs);
 
-        }
-
-        else if (ifBoom(passed)){
-            if (!ifBoom(inputs)){
+        } else if (ifBoom(passed)) {
+            if (!ifBoom(inputs)) {
                 System.out.println("你输入的不是炸弹，输入失败");
             }
-            return ifInsideBigger(passed,inputs);
-        }
-
-        else if (ifKingBoom(passed)){
+            return ifInsideBigger(passed, inputs);
+        } else if (ifKingBoom(passed)) {
             return false;
-        }
-
-        else if (passed.size() == 1){
-            if (inputs.size() != 1){
+        } else if (passed.size() == 1) {
+            if (inputs.size() != 1) {
                 System.out.println("你输入的不是单，输入失败");
                 return false;
             }
 
-            return ifInsideBigger(passed,inputs);
+            return ifInsideBigger(passed, inputs);
         }
 
 
         return false;
     }
 
+    /**
+     * This method is the main playing method following the rules under.
+     * landlord - play first
+     * following the circle user - AI1 - AI2
+     * choosing to pass, if the given cards are bigger
+     */
     public void playMain() {
         Scanner sc = new Scanner(System.in);
         ArrayList<String> com = new ArrayList<String>();
@@ -316,8 +363,9 @@ public class Game {
         ArrayList<Card> ai2Out = new ArrayList<Card>();
         ArrayList<Card> out = new ArrayList<Card>();
 
-        //
+        //if the user is the landlord
         if (user.getCardsOnHand().size() == 20) {
+            //run for the first round
             System.out.println("你是地主，由你打第一轮牌");
             sleep(500);
             System.out.println("你要打的牌为：");
@@ -333,18 +381,18 @@ public class Game {
             }
 
             out = user.userPlay(com);
+            System.out.println("\n");
+            sleep(700);
+            System.out.println("你打的牌为");
+            sleep(700);
+            printCard(out);
 
+            //loop for the entire game
             while (true) {
 
+                //AI1's decision
                 if (out.size() != 0) {
-                    System.out.println("\n");
-                    sleep(700);
-                    System.out.println("你打的牌为");
-                    sleep(700);
-                    printCard(out);
-
                     ai1Out = ai1.sb.AIPlay(out);
-
 
                     if (ai1Out != null) {
                         if (ai1Out.size() != 0) {
@@ -366,8 +414,9 @@ public class Game {
                     } else {
                         ai2Out = ai2.sb.AIPlay(out);
                     }
-
                     sleep(700);
+
+                    //now for the AI2's decision
                     if (ai2Out != null) {
                         if (ai2Out.size() != 0) {
                             System.out.println("人工智障二打的牌为");
@@ -382,7 +431,7 @@ public class Game {
 
                     sleep(700);
 
-
+                    //checking if one of the players has won
                     whoWin();
                     if (winNum != 0) {
                         break;
@@ -392,28 +441,60 @@ public class Game {
                             "打完之后的牌为");
                     printCard(user.getCardsOnHand());
                     sleep(500);
-
+                    //second and lasting round, the user can choose to pass the round
                     sc = new Scanner(System.in);
                     com = new ArrayList<String>();
+                    System.out.println("你可以输入pass来放弃这一轮");
                     System.out.println("\n" +
                             "输入你要打的牌");
 
                     input = sc.next();
+                    pass = input.equals("pass");
                     com.add(input);
 
-                    while (true) {
-                        input = sc.next();
-                        if (input.equals("-1")) {
-                            break;
+                    //if the user choose not to pass
+                    if (!pass) {
+                        //adding user's commend to pick its cards
+                        while (true) {
+                            input = sc.next();
+                            if (input.equals("-1")) {
+                                break;
+                            }
+                            com.add(input);
                         }
-                        com.add(input);
+                        out = user.userPlay(com);
+                        com.clear();
+                        userCardStatus = IfInputBigger(ai2Out, out);
+
+                        //if the user's card is not following the rules
+                        if (!userCardStatus) {
+                            user.getCardsOnHand().addAll(out);
+                            System.out.println("因为输入错误，本轮你没有打牌");
+                            if (ai2Out != null) {
+                                out = ai2Out;
+                            } else if (ai1Out != null) {
+                                out = ai1Out;
+                            }
+                        } else {
+                            System.out.println("\n");
+                            sleep(700);
+                            System.out.println("你打的牌为");
+                            sleep(700);
+                            printCard(out);
+                        }
+                    } else {
+                        //the user choose to pass the round
+                        com.clear();
+                        if (ai2Out != null) {
+                            out = ai2Out;
+                        } else if (ai1Out != null) {
+                            out = ai1Out;
+                        }
                     }
-                    out = user.userPlay(com);
+
                 }
             }
         }
-
-
 
         //Ai1 is the landlord
         else if (ai1.getCardsOnHand().size() == 20) {
@@ -443,6 +524,7 @@ public class Game {
                     }
                 }
 
+                System.out.println("你可以输入pass来放弃这一轮");
                 System.out.println("现在归你打牌了");
                 sleep(500);
                 System.out.println("你的牌为");
@@ -451,41 +533,51 @@ public class Game {
                 sleep(500);
 
                 String input = sc.next();
+                pass = input.endsWith("pass");
                 com.add(input);
 
-                while (true) {
-                    input = sc.next();
-                    if (input.equals("-1")) {
-                        break;
+                if (!pass) {
+                    while (true) {
+                        input = sc.next();
+                        if (input.equals("-1")) {
+                            break;
+                        }
+                        com.add(input);
                     }
-                    com.add(input);
-                }
 
 
-                out = user.userPlay(com);
-                com.clear();
-                userCardStatus = IfInputBigger(ai2Out,out);
-                if (!userCardStatus){
-                    user.getCardsOnHand().addAll(out);
-                    user.rank();
-                    if (ai2Out != null) {
-                        out = ai2Out;
-                    }else {
-                        out = ai1Out;
+                    out = user.userPlay(com);
+                    com.clear();
+                    userCardStatus = IfInputBigger(ai2Out, out);
+                    if (!userCardStatus) {
+                        user.getCardsOnHand().addAll(out);
+                        user.rank();
+                        if (ai2Out != null) {
+                            out = ai2Out;
+                        } else {
+                            out = ai1Out;
+                        }
                     }
-                }
 
-                if (out.size() != 0) {
-                    if (userCardStatus) {
-                        System.out.println("\n");
-                        sleep(700);
-                        System.out.println("你打的牌为");
-                        sleep(700);
-                        printCard(out);
-                    }else {
-                        System.out.println("\n");
-                        sleep(700);
-                        System.out.println("你输入错误没打成牌");
+                    if (out.size() != 0) {
+                        if (userCardStatus) {
+                            System.out.println("\n");
+                            sleep(700);
+                            System.out.println("你打的牌为");
+                            sleep(700);
+                            printCard(out);
+                        } else {
+                            System.out.println("\n");
+                            sleep(700);
+                            System.out.println("你输入错误没打成牌");
+                        }
+                    } else {
+                        com.clear();
+                        if (ai2Out != null) {
+                            out = ai2Out;
+                        } else if (ai1Out != null) {
+                            out = ai1Out;
+                        }
                     }
 
 
@@ -534,7 +626,7 @@ public class Game {
                         break;
                     }
                 }
-                runTime ++;
+                runTime++;
             }
         }
 
@@ -545,18 +637,18 @@ public class Game {
             while (true) {
                 if (runTime == 0) {
                     ai2Out = ai2.sb.FirstRound();
-                }else {
-                    if (ai1Out != null){
+                } else {
+                    if (ai1Out != null) {
                         ai2Out = ai2.sb.AIPlay(ai1Out);
-                    }else {
+                    } else {
                         ai2Out = ai2.sb.AIPlay(out);
                     }
                 }
-                runTime ++;
+                runTime++;
 
-                if (ai2Out == null){
+                if (ai2Out == null) {
                     System.out.println("用户二啥也不知道");
-                }else {
+                } else {
                     System.out.println("用户二打的牌是：");
                     sleep(500);
                     printCard(ai2Out);
@@ -566,77 +658,84 @@ public class Game {
                 sleep(500);
                 printCard(user.getCardsOnHand());
                 String input = sc.next();
+                pass = input.equals("pass");
                 com.add(input);
 
-
-                while (true) {
-                    input = sc.next();
-                    if (input.equals("-1")) {
-                        break;
-                    }
-                    com.add(input);
-                }
-                out = user.userPlay(com);
-                com.clear();
-
-                if (out.size() != 0) {
-                    userCardStatus = IfInputBigger(ai2Out,out);
-                    if (!userCardStatus){
-                        user.getCardsOnHand().addAll(out);
-                        user.rank();
-                        if (ai2Out != null){
-                            out = ai2Out;
-                        }else {
-                            out = ai1Out;
+                if (!pass) {
+                    while (true) {
+                        input = sc.next();
+                        if (input.equals("-1")) {
+                            break;
                         }
+                        com.add(input);
                     }
+                    out = user.userPlay(com);
+                    com.clear();
 
-                    if (userCardStatus) {
-                        System.out.println("\n");
-                        sleep(700);
-                        System.out.println("你打的牌为");
-                        sleep(700);
-                        printCard(out);
-                    }else {
-                        System.out.println("\n");
-                        sleep(700);
-                        System.out.println("你输入错误没打成牌");
-                    }
+                    if (out.size() != 0) {
+                        userCardStatus = IfInputBigger(ai2Out, out);
+                        if (!userCardStatus) {
+                            user.getCardsOnHand().addAll(out);
+                            user.rank();
+                            if (ai2Out != null) {
+                                out = ai2Out;
+                            } else {
+                                out = ai1Out;
+                            }
+                        }
 
-                    ai1Out = ai1.sb.AIPlay(out);
-
-
-                    if (ai1Out != null) {
-                        if (ai1Out.size() != 0) {
-                            System.out.println("人工智障一打的牌为");
-                            printCard(ai1Out);
-
+                        if (userCardStatus) {
+                            System.out.println("\n");
+                            sleep(700);
+                            System.out.println("你打的牌为");
+                            sleep(700);
+                            printCard(out);
                         } else {
-                            System.out.println("人工智障一啥也不知道");
+                            System.out.println("\n");
+                            sleep(700);
+                            System.out.println("你输入错误没打成牌");
                         }
+                    }
+                } else {
+                    com.clear();
+                    if (ai2Out != null) {
+                        out = ai2Out;
+                    } else if (ai1Out != null) {
+                        out = ai1Out;
+                    }
+                }
+
+                ai1Out = ai1.sb.AIPlay(out);
+
+
+                if (ai1Out != null) {
+                    if (ai1Out.size() != 0) {
+                        System.out.println("人工智障一打的牌为");
+                        printCard(ai1Out);
+
                     } else {
                         System.out.println("人工智障一啥也不知道");
                     }
-
-
-
-                    whoWin();
-                    if (winNum != 0) {
-                        break;
-                    }
-
+                } else {
+                    System.out.println("人工智障一啥也不知道");
                 }
 
 
-                runTime++;
+                whoWin();
+                if (winNum != 0) {
+                    break;
+                }
+
             }
 
 
+            runTime++;
         }
+
 
     }
 
-
+    //getters
     public Player getUser() {
         return user;
     }

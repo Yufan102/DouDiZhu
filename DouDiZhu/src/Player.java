@@ -2,20 +2,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+/*
+This method is used for creating differ types of uses
+And the method is used with AI class, which will implement different
+types of player's behavior
+ */
 public class Player {
     private String type;
-    private ArrayList<Card>cardsOnHand = new ArrayList<Card>();
-    private ArrayList<Card>AIOutput = new ArrayList<Card>();
-    private ArrayList<Card>backUp = new ArrayList<Card>();
-
-    private ArrayList<Card>ai1 = new ArrayList<Card>();
+    private ArrayList<Card> cardsOnHand = new ArrayList<Card>();      // the current player's cards
+    private ArrayList<Card> backUp = new ArrayList<Card>();
+    private ArrayList<Card> ai1 = new ArrayList<Card>();
     AI sb = new SillyAI(this);
     private boolean coop;
     private Points points;
 
 
-    public Player(){}
+    public Player() {
+    }
 
+    //basic getters and setters
     public String getType() {
         return type;
     }
@@ -32,25 +37,11 @@ public class Player {
         return coop;
     }
 
-    public void rank(){
-        Collections.sort(cardsOnHand);
-    }
-
     public void setCardsOnHand(ArrayList<Card> cardsOnHand) {
         this.cardsOnHand = cardsOnHand;
     }
 
-    public void isLord(){
-        this.type = "Load";
-        this.coop = false;
-    }
-
-    public void isFarmer(){
-        this.type = "Farmer";
-        this.coop = false;
-    }
-
-    public void setPoints(int num){
+    public void setPoints(int num) {
         points = new Points(num);
     }
 
@@ -58,8 +49,37 @@ public class Player {
         return points;
     }
 
-    public ArrayList<Card> userPlay(ArrayList<String>com){
-        ArrayList<Card>userOutput = new ArrayList<Card>();
+    /**
+     * This method will sort the card in increasing order
+     * For example 3,4,5,6,7 ......,2,-,+
+     */
+    public void rank() {
+        Collections.sort(cardsOnHand);
+    }
+
+    /*
+    This two methods are created for further functions of game
+     */
+    public void isLord() {
+        this.type = "Load";
+        this.coop = false;
+    }
+
+    public void isFarmer() {
+        this.type = "Farmer";
+        this.coop = false;
+    }
+
+
+    /**
+     * This method will get the input information from the system input
+     * and it will translate into cards for user's output
+     *
+     * @param com the input list
+     * @return user's final output
+     */
+    public ArrayList<Card> userPlay(ArrayList<String> com) {
+        ArrayList<Card> userOutput = new ArrayList<Card>();
         int count = 0;
         backUp = cardsOnHand;
 
@@ -74,32 +94,12 @@ public class Player {
             }
         }
 
-        if (count != com.size()){
+        //when issues are occurred, the cards will not be deleted
+        if (count != com.size()) {
             cardsOnHand = backUp;
             System.out.println("你没有这样的牌");
         }
         this.rank();
         return userOutput;
     }
-
-    public void ReturnBack(){
-        this.setCardsOnHand(backUp);
-    }
-
-
-
-    //stupid AI
-    public void AIPlayer(ArrayList<Card>out){
-        ai1 = sb.AIPlay(out);
-        cardsOnHand = sb.getAiCard();
-    }
-
-
-
-
-    public ArrayList<Card> getAi1() {
-        return ai1;
-    }
-
-
 }
