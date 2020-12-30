@@ -15,3 +15,4 @@ Further update:
 3, Points system adding to the system  
 4, User could decide to contiune playing or quiting with the added points system stored in the local files  
 5, System will learn user's playing style and help the AI with the better decisions.  
+6, English user interface and English rules of DouDiZhu card game.  
